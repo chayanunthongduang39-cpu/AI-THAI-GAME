@@ -10,14 +10,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap');
         
         body {
-            font-family: 'Mitr', sans-serif;
+            font-family: 'Sarabun', sans-serif;
             background-color: #fff5f5;
             background-image: radial-gradient(#ffd6d6 1px, transparent 1px);
             background-size: 20px 20px;
-            color: #5d4037;
+            color: #4a3728;
             margin: 0;
             padding: 10px;
             display: flex;
@@ -35,7 +35,7 @@
             box-shadow: 0 12px 30px rgba(255, 183, 183, 0.4);
             width: 95%;
             max-width: 650px;
-            padding: 20px;
+            padding: 25px;
             box-sizing: border-box;
             text-align: center;
             position: relative;
@@ -44,13 +44,12 @@
         h1 {
             color: #ff7b7b;
             margin-top: 0;
-            font-size: 26px;
+            font-size: 28px;
             text-shadow: 2px 2px #ffe3e3;
             margin-bottom: 5px;
-            font-weight: 500;
+            font-weight: 700;
         }
 
-        /* หน้าอธิบายกติกา */
         .rules-box {
             background: #fffaf0;
             border: 2px dashed #ffb7b7;
@@ -63,10 +62,13 @@
             color: #ff7b7b;
             margin-top: 0;
             text-align: center;
+            font-size: 20px;
+            font-weight: 700;
         }
         .rules-box ul {
             padding-left: 20px;
             line-height: 1.8;
+            font-size: 16px;
         }
 
         .alert-box {
@@ -81,8 +83,8 @@
             z-index: 1000;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 700;
             pointer-events: none;
             width: 85%;
             box-sizing: border-box;
@@ -90,7 +92,6 @@
         .alert-box.show { transform: translate(-50%, -50%) scale(1); }
         .alert-success { color: #2ecc71; border-color: #2ecc71; background: #e8f8f0; }
         .alert-danger { color: #e74c3c; border-color: #e74c3c; background: #fdedec; }
-        .alert-info { color: #3498db; border-color: #3498db; background: #ebf5fb; }
 
         .sensor-view {
             position: fixed;
@@ -106,7 +107,6 @@
             box-shadow: 0 6px 20px rgba(255, 183, 183, 0.5);
         }
 
-        /* 🛠 แก้ไขจุดนี้: หลอกระบบมือถือไม่ให้สั่งฟรีซหรือหยุดการทำงานของวิดีโอกล้อง */
         #webcam-video {
             position: absolute;
             width: 1px;
@@ -143,9 +143,9 @@
         .status-bar {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
-            font-weight: bold;
-            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: 700;
+            font-size: 16px;
             background: #fff0f0;
             padding: 8px 12px;
             border-radius: 12px;
@@ -153,12 +153,28 @@
         .hearts { color: #ff4757; }
         .score { color: #ff7b7b; }
 
-        .question-box {
-            font-size: 16px;
-            line-height: 1.5;
+        .timer-container {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
             margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .timer-bar {
+            width: 100%;
+            height: 100%;
+            background-color: #ff4757;
+            transition: width 1s linear, background-color 0.3s ease;
+        }
+
+        .question-box {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 25px;
             background: #fffaf0;
-            padding: 15px;
+            padding: 18px;
             border-radius: 15px;
             border: 2px solid #ffe3e3;
             min-height: 60px;
@@ -171,7 +187,8 @@
             position: relative;
             background-color: #ffffff;
             color: #ff7b7b;
-            font-family: 'Mitr', sans-serif;
+            font-family: 'Sarabun', sans-serif;
+            font-weight: 600;
             overflow: hidden;
             box-sizing: border-box;
             cursor: pointer;
@@ -182,11 +199,15 @@
         .btn {
             border: 2px solid #ffccd5;
             padding: 12px 15px;
-            font-size: 15px;
+            font-size: 16px;
             border-radius: 12px;
             width: 100%;
             margin-bottom: 8px;
             box-shadow: 0 4px 0 #ffccd5;
+        }
+        
+        #start-game-btn, #next-q-btn, #restart-btn, #clear-btn, #hint-button {
+            text-align: center;
         }
 
         .grid-container {
@@ -200,9 +221,15 @@
             border: 2px solid #ffccd5;
             box-shadow: 0 3px 0 #ffccd5;
             border-radius: 10px;
-            padding: 8px 0;
-            font-size: 16px;
+            padding: 10px 0;
+            font-size: 20px;
+            font-weight: 700;
             width: 100%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 45px;
         }
 
         .btn:not(:disabled):hover, .grid-item:not(:disabled):hover {
@@ -238,14 +265,11 @@
             box-shadow: 0 3px 0 #dcdde1 !important;
             cursor: not-allowed;
             opacity: 0.6;
-            transform: none !important;
         }
 
         .btn-progress {
             position: absolute;
-            top: 0; 
-            left: 0; 
-            bottom: 0;
+            top: 0; left: 0; bottom: 0;
             width: 0%;
             background: rgba(255, 123, 123, 0.45);
             pointer-events: none;
@@ -253,122 +277,137 @@
             transition: width 0.05s linear;
         }
 
-        .btn-text {
-            position: relative;
-            z-index: 2;
-        }
+        .btn-text { position: relative; z-index: 2; }
 
-        .answer-slots {
+        /* Container ช่องตอบคำถาม */
+        .answer-underline-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
+            align-items: flex-end;
+            gap: 12px;
+            margin: 40px 0;
+            min-height: 85px;
             flex-wrap: wrap;
         }
-        
-        .slot-group {
-            position: relative;
-            width: 30px;
-            height: 50px;
+
+        .char-slot {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: flex-end;
+            width: 42px;
+            height: 85px;
+            position: relative;
         }
 
-        .slot-base {
-            width: 100%;
-            height: 30px;
-            border-bottom: 3px solid #ff7b7b;
-            font-size: 18px;
-            font-weight: 500;
-            color: #5d4037;
+        .char-text {
+            font-size: 34px;
+            font-weight: 700;
+            font-family: 'Sarabun', sans-serif;
+            color: #4a3728; /* ✨ เปลี่ยนทุกอย่างให้เป็นสีน้ำตาลเข้ม/ดำ เหมือนกันทั้งหมด */
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            line-height: 30px;
-        }
-
-        .slot-decor {
-            position: absolute;
-            font-size: 18px;
-            font-weight: 500;
-            color: #5d4037;
-            width: 100%;
-            text-align: center;
-            left: 0;
             line-height: 1;
+            white-space: nowrap;
+        }
+
+        /* ✨ นำสีส้มพาสเทลออก ปรับช่องที่เฉลยล่วงหน้าให้เป็นสีเดียวกัน */
+        .char-slot.revealed .char-text {
+            color: #4a3728; 
+        }
+
+        .char-text .hidden-base {
+            visibility: hidden; 
+            width: 0;
+            display: inline-block;
         }
         
-        .slot-top { top: -2px; }
-        .slot-bottom { bottom: -4px; }
+        /* ✨ ส่วนสระลอยเดี่ยวล่วงหน้า ก็ปรับเป็นสีน้ำตาลเข้ม/ดำ เช่นเดียวกัน */
+        .char-text .visible-floating {
+            color: #4a3728; 
+            display: inline-block;
+        }
 
-        .hint-text { color: #ff9f43; font-weight: bold; margin-bottom: 10px; display: none; }
+        .underline-bar {
+            width: 100%;
+            height: 4px;
+            background-color: #ff7b7b;
+            border-radius: 2px;
+            margin-top: 2px;
+        }
         
-        .gacha-box { 
+        .stats-box { 
             border: 4px dashed #ffb7b7; 
-            padding: 20px; 
+            padding: 25px; 
             border-radius: 20px; 
             background: #fffaf0; 
             display: none; 
+            text-align: left;
         }
 
-        .gift-box-container {
-            font-size: 80px;
-            margin: 20px 0;
+        .stats-title {
+            text-align: center;
+            color: #ff7b7b;
+            margin-top: 0;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .score-large {
+            font-size: 46px;
+            font-weight: 700;
+            color: #ff4757;
+            text-align: center;
+            margin: 15px 0;
+            text-shadow: 2px 2px #ffe3e3;
+        }
+
+        .feedback-msg {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 5px solid #ff7b7b;
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .weakness-card {
+            background: #fff5f5;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #ffccd5;
+            margin-bottom: 20px;
+        }
+
+        .weakness-tag {
             display: inline-block;
-            user-select: none;
-            animation: idleShake 2s infinite ease-in-out;
-            transition: transform 0.1s ease;
+            background: #ff4757;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .gift-box-container.opening {
-            animation: superShake 0.15s infinite ease-in-out !important;
-        }
-
-        @keyframes idleShake {
-            0%, 100% { transform: rotate(0deg); }
-            10%, 30% { transform: rotate(-6deg); }
-            20%, 40% { transform: rotate(6deg); }
-            50% { transform: rotate(0deg); }
-        }
-
-        @keyframes superShake {
-            0%, 100% { transform: scale(1.2) rotate(0deg) translateY(0); }
-            20% { transform: scale(1.3) rotate(-15deg) translateY(-5px); }
-            40% { transform: scale(1.1) rotate(12deg) translateY(3px); }
-            60% { transform: scale(1.35) rotate(-10deg) translateY(-2px); }
-            80% { transform: scale(1.15) rotate(15deg) translateY(4px); }
-        }
-
-        #webcam-status { color: #a5b1c2; font-size: 13px; margin-bottom: 10px; }
+        #webcam-status { color: #8892a0; font-size: 14px; margin-bottom: 10px; font-weight: 600; }
 
         @media (max-width: 500px) {
-            body {
-                padding: 5px;
-                align-items: flex-start;
-                padding-top: 15px;
-            }
-            h1 { font-size: 22px; }
+            body { padding: 5px; align-items: flex-start; padding-top: 15px; }
+            h1 { font-size: 24px; }
             .game-container { padding: 15px; border-width: 4px; }
-            .question-box { font-size: 14px; padding: 12px; }
-            .btn { font-size: 14px; padding: 10px 12px; }
+            .question-box { font-size: 16px; padding: 12px; }
             
-            .grid-container {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 5px;
-            }
-            .grid-item { font-size: 15px; padding: 10px 0; }
+            .grid-container { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+            .grid-item { font-size: 18px; padding: 8px 0; }
             
-            .sensor-view {
-                width: 100px;
-                height: 75px;
-                bottom: 8px;
-                right: 8px;
-                border-width: 2px;
-            }
-            .slot-group { width: 24px; height: 46px; }
-            .slot-base { font-size: 16px; height: 26px; line-height: 26px; }
-            .slot-decor { font-size: 16px; }
-            .status-bar { font-size: 12px; padding: 6px 10px; }
+            .sensor-view { width: 100px; height: 75px; bottom: 8px; right: 8px; }
+            .char-slot { width: 32px; height: 75px; }
+            .char-text { font-size: 26px; height: 60px; }
         }
     </style>
 </head>
@@ -386,15 +425,16 @@
     <h1>✨ AI-THAI GAME ✨</h1>
     <div id="webcam-status">🌸 กำลังเรียกเปิดกล้องและระบบจับเซนเซอร์มือ AI...</div>
     
+    <!-- 1. หน้ากติกา -->
     <div id="rules-screen" style="display:block;">
         <div class="rules-box">
             <h3>📜 กติกาการร่วมสนุก</h3>
             <ul>
-                <li>เกมนี้มีคำถามเกี่ยวกับวรรณคดีและสำนวนไทยทั้งหมด <b>12 ข้อ</b></li>
-                <li>มีทั้งรูปแบบ <b>"เลือกช้อยส์ตอบ"</b> และ <b>"เติมพยัญชนะ"</b> ให้ถูกต้อง</li>
+                <li>ระบบจะทำการ <b>"สุ่มคละคำถามใหม่"</b> ทุกครั้งที่เริ่มเล่น</li>
+                <li><b>⏳ ข้อเลือกช้อยส์:</b> มีเวลาจำกัดข้อละ <b>20 วินาที</b></li>
+                <li><b>⏳ ข้อเติมคำ:</b> มีเวลาจำกัดข้อละ <b>1 นาที</b></li>
                 <li>ผู้เล่นมีพลังชีวิต 💖 ทั้งหมด 3 ดวง สามารถใช้กด <b>"🔮 ใช้คำใบ้"</b> ได้</li>
                 <li><b>วิธีควบคุม:</b> ชูนิ้วชี้ขึ้นมา เล็งพอยเตอร์ค้างไว้ที่ปุ่มที่ต้องการ 2 วินาทีเพื่อกดยืนยัน</li>
-                <li>เมื่อตอบเสร็จในแต่ละข้อ ระบบจะแสดงผลคำตอบ และผู้เล่นต้องกดปุ่มเพื่อลุยข้อถัดไป</li>
             </ul>
         </div>
         <button class="btn" id="start-game-btn" style="background:#ff7b7b; color:#fff; font-size:18px; padding:12px; border-color:#ff4757; box-shadow:0 5px 0 #ff4757;" onclick="startGameNow()">
@@ -402,6 +442,7 @@
         </button>
     </div>
 
+    <!-- 2. หน้าเล่นเกมหลัก -->
     <div id="game-play" style="display:none;">
         <div class="status-bar">
             <div id="question-number">ข้อที่ 1/12</div>
@@ -409,16 +450,19 @@
             <div class="score" id="score-display">คะแนน: 0</div>
         </div>
 
+        <div class="timer-container">
+            <div id="game-timer-bar" class="timer-bar"></div>
+        </div>
+
         <div class="question-box" id="question-text">กำลังโหลด...</div>
-        <div class="hint-text" id="hint-display-text">คำใบ้: </div>
 
         <div id="choices-container"></div>
 
         <div id="fill-container" style="display:none;">
-            <div class="answer-slots" id="answer-slots"></div>
+            <div class="answer-underline-container" id="answer-underline-container"></div>
             
             <button class="btn" id="clear-btn" style="width:auto; padding:8px 22px; margin-bottom:15px; background:#f1f2f6; border-color:#ced6e0; color:#57606f; box-shadow:0 3px 0 #ced6e0;" onclick="deleteLastLetter()">
-                <div class="btn-progress"></div><span class="btn-text">↩️ ล้างคำตอบ</span>
+                <div class="btn-progress"></div><span class="btn-text">↩️ ลบตัวอักษรล่าสุด</span>
             </button>
             
             <div class="grid-container" id="grid-container"></div>
@@ -435,47 +479,59 @@
         </button>
     </div>
 
-    <div id="gacha-screen" class="gacha-box">
-        <h2>🎉 จบเกมแล้วเย้! 🎉</h2>
-        <p>หนูตอบถูกทั้งหมด <span id="final-score" style="color:#ff7b7b; font-weight:bold; font-size:22px;">0</span> / 12 ข้อ</p>
-        <p id="chance-text">โอกาสเปิดเจอกล่องรางวัลคือ: 0%</p>
+    <!-- 3. หน้าสรุปคะแนนหลังจบเกม -->
+    <div id="stats-screen" class="stats-box">
+        <h2 class="stats-title">🎉 สรุปผลการเรียนรู้ 🎉</h2>
+        <div class="score-large" id="display-final-score">0 / 12</div>
+        <div class="feedback-msg" id="feedback-encouragement">กำลังประมวลผลคำแนะนำ...</div>
         
-        <div id="gift-box" class="gift-box-container">🎁</div>
+        <div class="weakness-card">
+            <div class="weakness-tag">📊 การวิเคราะห์จุดอ่อนรายบุคคล</div>
+            <div id="weakness-analysis-text" style="line-height:1.6; font-size:15px; color:#4a3728;">กำลังคำนวณประวัติการตอบ...</div>
+        </div>
         
-        <button class="btn" id="gacha-btn" style="background:#ff7b7b; color:#fff; font-size:20px; padding:15px; border-color:#ff4757; box-shadow:0 5px 0 #ff4757;" onclick="drawGacha()">
-            <div class="btn-progress"></div><span class="btn-text">เปิดกล่องของขวัญลุ้นโชค!</span>
+        <button class="btn" id="restart-btn" style="background:#3498db; color:#fff; font-size:18px; padding:12px; border-color:#2980b9; box-shadow:0 5px 0 #2980b9;" onclick="window.location.reload()">
+            <div class="btn-progress"></div><span class="btn-text">🔄 เล่นใหม่อีกครั้ง</span>
         </button>
-        <div id="gacha-result" style="font-size:22px; font-weight:bold; margin-top:20px; min-height: 40px;"></div>
     </div>
 </div>
 
 <script>
-    const questions = [
-        { type: "choice", q: "“ถึงบางพูดพูดดีเป็นศรีศักดิ์ มีคนรักรสถ้อยอร่อยจิต แม้นพูดชั่วตัวตายทำลายมิตร จะชอบผิดในมนุษย์เพราะพูดจา” จากเรื่องใด?", choices: ["ก. นิราศนรินทร์คำโคลง", "ข. โคลงโลกนิติ", "ค. นิราศภูเขาทอง", "ง. สุภาษิตพระร่วง"], ans: 2 },
-        { type: "fill", q: "สำนวน: “งานการที่ปล่อยไว้ให้สะสมค้างคา จนทำให้ลำบากเดือดร้อน”", ans: "ดินพอกหางหมู", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวส" },
-        { type: "choice", q: "รามเกียรติ์ ตอนนารายณ์ปราบนนทก พระนารายณ์แปลงเป็นใครหลอกล่อนนทก และสาปให้ไปเกิดเป็นใคร?", choices: ["ก. พระแม่ลักษมี - อินทรชิต", "ข. พระอิศวร - ไมยราพ", "ค. นางสุวรรณอัปสร - ทศกัณฐ์", "ง. พระราม - ทศกัณฐ์"], ans: 2 },
-        { type: "fill", q: "สำนวน: “หน้าตาแสดงความเมตตา แต่ใจโหดเหี้ยม”", ans: "หน้าเนื้อใจเสือ", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลว" },
-        { type: "choice", q: "การที่ 'นายล้ำ' ยอมถอยและไม่แสดงตัวว่าเป็นพ่อแม่ลออ มีสาเหตุสำคัญที่สุดจากสิ่งใด?", choices: ["ก. เพราะเห็นความรักบริสุทธิ์และอนาคตที่สดใสของลูก", "ข. เพราะกลัวพระยาภักดีนฤนาถจะแจ้งความจับตน", "ค. เพราะต้องการเงินที่เสนอให้", "ง. เพราะรู้ว่าตัวเองไม่มีสมบัติจะไปสู้"], ans: 0 },
-        { type: "fill", q: "สำนวน: \"คนที่ไม่ถูกกัน ไม่ลงรอยกัน หรือมีนิสัยเข้ากันไม่ได้\"", ans: "ขมิ้นกับปูน", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวสฬอ" },
-        { type: "choice", q: "มหาเวสสันดรชาดก กัณฑ์ฉกษัตริย์ ฝนที่ตกช่วยกษัตริย์ทั้ง 6 ให้ฟื้นคืนสติชื่อว่าอะไร?", choices: ["ก. ฝนห่าแก้ว", "ข. ฝนสัตตรัตนมาศ", "ค. ฝนตกแดดออก", "ง. ฝนโบกขรพรรษ"], ans: 3 },
-        { type: "fill", q: "อะไรเอ่ย: ขาเรียวเล็ก คนเจ๊กชอบใช้", ans: "ตะเกียบ", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวสฬอ" },
-        { type: "choice", q: "ลิลิตตะเลงพ่าย พระนเรศวรทรงฝันว่าชนะจระเข้ใหญ่ หมายถึงมีชัยเหนือผู้ใด?", choices: ["ก. ชนะต่อสภาพอากาศเลวร้าย", "ข. ชนะต่อพระเจ้าตะเบ็งชเวตี้", "ค. ชนะต่อพระมหาอุปราชา", "ง. ชนะต่อพระเจ้าบุเรงนอง"], ans: 2 },
-        { type: "fill", q: "อะไรเอ่ย: เช้าๆ เข้าถ้ำ ค่ำๆ ออกมาเรียงราย", ans: "ดาว", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวสฬอ" },
-        { type: "choice", q: "“เต็งแต้วแก้วกาหลง บานบุษบงส่งกลิ่นอาย...” มีดอกไม้ทั้งหมดกี่ชนิด?", choices: ["ก. 1 ชนิด", "ข. 2 ชนิด", "ค. 3 ชนิด", "ง. 4 ชนิด"], ans: 3 },
-        { type: "fill", q: "อะไรเอ่ย: ตาแก่หลังโก่ง เดินโทงๆ กินข้าวทั่วทุ่ง", ans: "เคียว", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวสฬอ" }
+    const originalQuestions = [
+        { type: "choice", category: "วรรณคดี", q: "“ถึงบางพูดพูดดีเป็นศรีศักดิ์ มีคนรักรสถ้อยอร่อยจิต แม้นพูดชั่วตัวตายทำลายมิตร จะชอบผิดในมนุษย์เพราะพูดจา” จากเรื่องใด?", choices: ["ก. นิราศนรินทร์คำโคลง", "ข. โคลงโลกนิติ", "ค. นิราศภูเขาทอง", "ง. สุภาษิตพระร่วง"], ans: 2 },
+        { type: "fill", category: "สำนวนไทย", q: "คนที่ทำตัวเป็นผู้รู้ ไม่ยอมเปิดรับฟังความคิดเห็นหรือความรู้ใหม่ๆ จากผู้อื่นอีกเลยตรงกับสำนวนใด", ans: "น้ำเต็มแก้ว", distractor: "กขคจชซทบปผฝพฟมรลวส", initiallyRevealedSlots: [1, 5] },
+        { type: "choice", category: "วรรณคดี", q: "รามเกียรติ์ ตอนนารายณ์ปราบนนทก พระนารายณ์แปลงเป็นใครหลอกล่อนนทก และสาปให้ไปเกิดเป็นใคร?", choices: ["ก. พระแม่ลักษมี - อินทรชิต", "ข. พระอิศวร - ไมยราพ", "ค. นางสุวรรณอัปสร - ทศกัณฐ์", "ง. พระราม - ทศกัณฐ์"], ans: 2 },
+        /* ✨ ปรับปรุงจุดที่ 2: เปลี่ยนจาก หาเหาใส่หัว เป็น ไข่ในหิน เรียบร้อยครับ */
+        { type: "fill", category: "สำนวนไทย", q: "การเลี้ยงดู ทะนุถนอม และปกป้องดูแลเป็นอย่างดีอย่างใกล้ชิดไม่ยอมให้เกิดอันตรายตรงกับสำนวนใด", ans: "ไข่ในหิน", distractor: "กขคจชซตทบปผฝพฟมรลวส", initiallyRevealedSlots: [0] }, 
+        { type: "choice", category: "วรรณคดี", q: "การที่ 'นายล้ำ' ยอมถอยและไม่แสดงตัวว่าเป็นพ่อแม่ลออ มีสาเหตุสำคัญที่สุดจากสิ่งใด?", choices: ["ก. เพราะเห็นความรักบริสุทธิ์และอนาคตที่สดใสของลูก", "ข. เพราะกลัวพระยาภักดีนฤนาถจะแจ้งความจับตน", "ค. เพราะต้องการเงินที่เสนอให้", "ง. เพราะรู้ว่าตัวเองไม่มีสมบัติจะไปสู้"], ans: 0 },
+        { type: "fill", category: "สำนวนไทย", q: "สำนวน: คนที่ไม่ถูกกัน ลงรอยกันไม่ได้เลย", ans: "ขมิ้นกับปูน", distractor: "กขคจชซตทบปผฝพฟมรลวสอ", initiallyRevealedSlots: [1] }, 
+        { type: "choice", category: "วรรณคดี", q: "มหาเวสสันดรชาดก กัณฑ์ฉกษัตริย์ ฝนที่ตกช่วยกษัตริย์ทั้ง 6 ให้ฟื้นคืนสติชื่อว่าอะไร?", choices: ["ก. ฝนห่าแก้ว", "ข. ฝนสัตตรัตนมาศ", "ค. ฝนตกแดดออก", "ง. ฝนโบกขรพรรษ"], ans: 3 },
+        { type: "fill", category: "ปริศนาคำทาย", q: "อะไรเอ่ย: ขาเรียวเล็ก ยาวเป็นคู่ คนจีนชอบใช้คีบอาหาร", ans: "ตะเกียบ", distractor: "กขคจชซตทบปผฝพฟมรลวสอ", initiallyRevealedSlots: [1, 2] }, 
+        { type: "choice", category: "วรรณคดี", q: "ลิลิตตะเลงพ่าย พระนเรศวรทรงฝันว่าชนะจระเข้ใหญ่ หมายถึงมีชัยเหนือผู้ใด?", choices: ["ก. ชนะต่อสภาพอากาศเลวร้าย", "ข. ชนะต่อพระเจ้าตะเบ็งชเวตี้", "ค. ชนะต่อพระมหาอุปราชา", "ง. ชนะต่อพระเจ้าบุเรงนอง"], ans: 2 },
+        { type: "fill", category: "ปริศนาคำทาย", q: "อะไรเอ่ย: เช้าๆ แอบเข้าถ้ำ พอตกค่ำออกมาเรียงรายเต็มฟ้า", ans: "ดาว", distractor: "กขคจชซตทนบปผฝพฟมยรลวสอ", initiallyRevealedSlots: [] }, 
+        { type: "choice", category: "วรรณคดี", q: "“เต็งแต้วแก้วกาหลง บานบุษบงส่งกลิ่นอาย...” มีดอกไม้ทั้งหมดกี่ชนิด?", choices: ["ก. 1 ชนิด", "ข. 2 ชนิด", "ค. 3 ชนิด", "ง. 4 ชนิด"], ans: 3 },
+        { type: "fill", category: "ปริศนาคำทาย", q: "อะไรเอ่ย: คนแก่หลังโก่ง เดินโทงๆ กินข้าวทั่วทุ่งนา", ans: "เคียว", distractor: "กขคจชซตทนบปผฝพฟมยรลวสอ", initiallyRevealedSlots: [0] }, 
     ];
 
+    let questions = []; 
     let currentQ = 0, score = 0, hearts = 3;
-    let currentInput = [];
-    let currentSlotIndex = 0; 
     let historyTracker = []; 
     let lastHoveredElement = null;
     let hoverStartTime = null; 
-    let textSlotsStructure = [];
     let isHintUsedForCurrentQ = false;
     let isSensorLocked = false; 
-    let isGachaScreenActive = false; 
+    let isStatsScreenActive = false; 
     let isRulesActive = true; 
+
+    let parsedSlots = []; 
+    let currentSlotIndex = 0;
+
+    let gameTimer = null;
+    let timeRemaining = 0;
+    let totalAllocatedTime = 0;
+    let wrongAnswersStats = { "วรรณคดี": 0, "สำนวนไทย": 0, "ปริศนาคำทาย": 0 };
+
+    const floatingToneRegex = /[\u0e31\u0e34\u0e35\u0e36\u0e37\u0e38\u0e39\u0e47\u0e48\u0e49\u0e4a\u0e4b\u0e4c\u0e33]/;
 
     function showGameAlert(text, type = 'info', callback = null) {
         let alertDiv = document.getElementById("custom-alert");
@@ -484,34 +540,69 @@
         setTimeout(() => {
             alertDiv.classList.remove("show");
             if(callback) callback();
-        }, 1800);
-    }
-
-    function parseThaiString(str) {
-        let result = [];
-        const topVowels = ['ิ', 'ี', 'ึ', 'ื', 'ั', '่', '้', '๊', '๋', '์', 'ํ', '็'];
-        const bottomVowels = ['ุ', 'ู', '̥'];
-        
-        for (let i = 0; i < str.length; i++) {
-            let char = str[i];
-            if (topVowels.includes(char) || bottomVowels.includes(char)) {
-                if (result.length > 0) {
-                    let last = result[result.length - 1];
-                    if (topVowels.includes(char)) last.top += char;
-                    if (bottomVowels.includes(char)) last.bottom += char;
-                }
-            } else {
-                result.push({ base: char, top: '', bottom: '' });
-            }
-        }
-        return result;
+        }, 2200); 
     }
 
     function startGameNow() {
         isRulesActive = false;
         document.getElementById("rules-screen").style.display = "none";
         document.getElementById("game-play").style.display = "block";
+        questions = [...originalQuestions].sort(() => Math.random() - 0.5);
         initGame();
+    }
+
+    function stopTimer() {
+        if(gameTimer) { clearInterval(gameTimer); gameTimer = null; }
+    }
+
+    function startTimer(seconds) {
+        stopTimer();
+        timeRemaining = seconds;
+        totalAllocatedTime = seconds;
+        
+        let timerBar = document.getElementById("game-timer-bar");
+        timerBar.style.width = "100%";
+        timerBar.style.backgroundColor = "#2ecc71";
+
+        gameTimer = setInterval(() => {
+            timeRemaining--;
+            let percentage = (timeRemaining / totalAllocatedTime) * 100;
+            timerBar.style.width = percentage + "%";
+
+            if (percentage <= 25) {
+                timerBar.style.backgroundColor = "#e74c3c";
+            } else if (percentage <= 50) {
+                timerBar.style.backgroundColor = "#f39c12";
+            }
+
+            if(timeRemaining <= 0) {
+                stopTimer();
+                handleTimeOut();
+            }
+        }, 1000);
+    }
+
+    function handleTimeOut() {
+        isSensorLocked = true;
+        let qData = questions[currentQ];
+        wrongAnswersStats[qData.category]++;
+        hearts--;
+        
+        let heartStr = "";
+        for(let i=0; i<hearts; i++) heartStr += "💖 ";
+        document.getElementById("heart-display").innerText = heartStr || "💔 หมดแย้ว";
+
+        if(qData.type === "choice") {
+            document.querySelectorAll("#choices-container .btn").forEach(b => b.disabled = true);
+            let correctText = qData.choices[qData.ans];
+            document.getElementById("hint-button").style.display = "none";
+            showGameAlert(`⏳ หมดเวลาแล้วจ้า! เฉลยคือ "${correctText}"`, "danger", () => { handleQuestionEndFeedback(); });
+        } else {
+            document.getElementById("clear-btn").disabled = true;
+            document.querySelectorAll(".grid-item").forEach(b => b.disabled = true);
+            document.getElementById("hint-button").style.display = "none";
+            showGameAlert(`⏳ หมดเวลาแล้วจ้า! เฉลยคือ "${qData.ans}"`, "danger", () => { handleQuestionEndFeedback(); });
+        }
     }
 
     function initGame() {
@@ -522,9 +613,9 @@
         setTimeout(() => { isSensorLocked = false; }, 1000);
 
         isHintUsedForCurrentQ = false;
-        currentInput = [];
         historyTracker = [];
         currentSlotIndex = 0; 
+        parsedSlots = [];
         
         document.getElementById("clear-btn").disabled = false;
         document.getElementById("question-number").innerText = `ข้อที่ ${currentQ + 1}/${questions.length}`;
@@ -540,10 +631,12 @@
             document.getElementById("choices-container").style.display = "block";
             document.getElementById("fill-container").style.display = "none";
             renderChoices(qData);
+            startTimer(20);
         } else {
             document.getElementById("choices-container").style.display = "none";
             document.getElementById("fill-container").style.display = "block";
             renderFill(qData);
+            startTimer(60); 
         }
     }
 
@@ -555,7 +648,7 @@
             btn.className = "btn";
             btn.id = `choice-${idx}`;
             btn.innerHTML = `<div class="btn-progress"></div><span class="btn-text">${choice}</span>`;
-            btn.onclick = (e) => {
+            btn.onclick = () => {
                 btn.classList.add("btn-pop-active");
                 checkChoiceAnswer(idx);
             };
@@ -566,9 +659,9 @@
     function checkChoiceAnswer(selectedIdx) {
         if (isSensorLocked) return; 
         isSensorLocked = true; 
+        stopTimer();
         
         let currentQuestionObj = questions[currentQ];
-        
         let allChoiceBtns = document.querySelectorAll("#choices-container .btn");
         allChoiceBtns.forEach(btn => btn.disabled = true);
         document.getElementById("hint-button").style.display = "none";
@@ -578,53 +671,72 @@
                 score++;
                 showGameAlert("✨ ถูกต้องเก่งที่สุดเลย! ✨", "success", () => { handleQuestionEndFeedback(); });
             } else {
+                wrongAnswersStats[currentQuestionObj.category]++;
                 let correctText = currentQuestionObj.choices[currentQuestionObj.ans];
                 showGameAlert(`❌ ยังไม่ถูกน้า! เฉลยคือ "${correctText}"`, "danger", () => { handleQuestionEndFeedback(); });
             }
         }, 400); 
     }
 
-    function renderFill(qData) {
-        textSlotsStructure = parseThaiString(qData.ans);
-        currentInput = new Array(textSlotsStructure.length).fill(""); 
+    function parseThaiStringIntoSlots(str) {
+        let items = [];
+        let rawChars = str.split('');
         
-        let slotsContainer = document.getElementById("answer-slots");
-        slotsContainer.innerHTML = "";
-
-        textSlotsStructure.forEach((item, i) => {
-            let group = document.createElement("div");
-            group.className = "slot-group";
+        for (let i = 0; i < rawChars.length; i++) {
+            let char = rawChars[i];
             
-            if(item.top) {
-                let topDiv = document.createElement("div");
-                topDiv.className = "slot-decor slot-top";
-                topDiv.innerText = item.top;
-                group.appendChild(topDiv);
+            if (floatingToneRegex.test(char)) {
+                if (items.length === 0) {
+                    items.push({ baseChar: char, upperLower: '', isRevealed: false, userChar: '' });
+                } else {
+                    items[items.length - 1].upperLower += char;
+                }
+            } else {
+                items.push({ baseChar: char, upperLower: '', isRevealed: false, userChar: '' });
             }
-            let baseDiv = document.createElement("div");
-            baseDiv.className = "slot-base";
-            baseDiv.id = `fill-base-${i}`;
-            group.appendChild(baseDiv);
+        }
+        return items;
+    }
 
-            if(item.bottom) {
-                let botDiv = document.createElement("div");
-                botDiv.className = "slot-decor slot-bottom";
-                botDiv.innerText = item.bottom;
-                group.appendChild(botDiv);
+    function renderFill(qData) {
+        parsedSlots = parseThaiStringIntoSlots(qData.ans);
+        
+        let customInitials = qData.initiallyRevealedSlots || [];
+        customInitials.forEach(slotIdx => {
+            if (parsedSlots[slotIdx]) {
+                parsedSlots[slotIdx].isRevealed = true;
+                parsedSlots[slotIdx].userChar = parsedSlots[slotIdx].baseChar;
             }
-            slotsContainer.appendChild(group);
         });
 
-        let requiredBases = textSlotsStructure.map(el => el.base); 
-        let extraPool = parseThaiString(qData.letters).map(el => el.base);
-        let dynamicExtras = extraPool.filter(char => !requiredBases.includes(char)).slice(0, 24 - requiredBases.length);
-        
-        let finalPool = [...requiredBases, ...dynamicExtras];
-        finalPool.sort(() => Math.random() - 0.5);
+        let underlineContainer = document.getElementById("answer-underline-container");
+        underlineContainer.innerHTML = "";
+
+        parsedSlots.forEach((slotData, i) => {
+            let slot = document.createElement("div");
+            slot.className = "char-slot" + (slotData.isRevealed ? " revealed" : "");
+            slot.id = `fill-slot-${i}`;
+            
+            underlineContainer.appendChild(slot);
+        });
+
+        updateSlots(); 
+
+        let neededLetters = [];
+        parsedSlots.forEach(slot => {
+            if (!slot.isRevealed) {
+                neededLetters.push(slot.baseChar);
+            }
+        });
+
+        let extraPool = qData.distractor.split('');
+        let safeExtras = extraPool.filter(char => !floatingToneRegex.test(char) && !neededLetters.includes(char));
+        let dynamicExtras = safeExtras.slice(0, 15 - neededLetters.length);
+        let finalKeyboardPool = [...neededLetters, ...dynamicExtras].sort(() => Math.random() - 0.5);
 
         let gridContainer = document.getElementById("grid-container");
         gridContainer.innerHTML = "";
-        finalPool.forEach((char, idx) => {
+        finalKeyboardPool.forEach((char, idx) => {
             let box = document.createElement("button");
             box.className = "grid-item";
             box.id = `grid-letter-${idx}`;
@@ -639,22 +751,19 @@
         });
         
         moveToNextValidSlot();
-        updateSlots();
     }
 
     function moveToNextValidSlot() {
-        let maxLen = textSlotsStructure.length;
-        while (currentSlotIndex < maxLen && isHintUsedForCurrentQ && isHintPosition(currentSlotIndex)) {
+        while (currentSlotIndex < parsedSlots.length && parsedSlots[currentSlotIndex].isRevealed) {
             currentSlotIndex++;
         }
     }
 
     function pressLetter(char, buttonId) {
         if (isSensorLocked) return; 
-        let maxLen = textSlotsStructure.length;
         
-        if (currentSlotIndex < maxLen) {
-            currentInput[currentSlotIndex] = char;
+        if (currentSlotIndex < parsedSlots.length) {
+            parsedSlots[currentSlotIndex].userChar = char;
             historyTracker.push({ slotIndex: currentSlotIndex, btnId: buttonId });
             
             if (buttonId) {
@@ -670,21 +779,16 @@
             updateSlots();
         }
 
-        let totalFilledCount = 0;
-        for (let i = 0; i < maxLen; i++) {
-            if (currentInput[i] && currentInput[i] !== "") totalFilledCount++;
-        }
+        let isAllFilled = parsedSlots.every(slot => slot.isRevealed || slot.userChar !== "");
 
-        if (totalFilledCount === maxLen) {
+        if (isAllFilled) {
             isSensorLocked = true;
-            let finalUserAns = "";
-            textSlotsStructure.forEach((item, idx) => {
-                finalUserAns += currentInput[idx] + item.top + item.bottom;
-            });
-
+            stopTimer();
+            
+            let finalUserAns = parsedSlots.map(slot => (slot.isRevealed ? slot.baseChar : slot.userChar) + slot.upperLower).join('');
+            
             document.getElementById("clear-btn").disabled = true;
-            let allGridItems = document.querySelectorAll(".grid-item");
-            allGridItems.forEach(item => item.disabled = true);
+            document.querySelectorAll(".grid-item").forEach(item => item.disabled = true);
             document.getElementById("hint-button").style.display = "none";
 
             setTimeout(() => {
@@ -692,9 +796,86 @@
                     score++;
                     showGameAlert("✨ ตอบถูกแล้ว ยอดเยี่ยมมาก! ✨", "success", () => { handleQuestionEndFeedback(); });
                 } else {
+                    wrongAnswersStats[questions[currentQ].category]++;
                     showGameAlert(`❌ ยังไม่ถูกน้า เฉลยคือ "${questions[currentQ].ans}"`, "danger", () => { handleQuestionEndFeedback(); });
                 }
             }, 400);
+        }
+    }
+
+    function deleteLastLetter() {
+        if (isSensorLocked || historyTracker.length === 0) return;
+        let lastAction = historyTracker.pop();
+        if (lastAction) {
+            parsedSlots[lastAction.slotIndex].userChar = ""; 
+            currentSlotIndex = lastAction.slotIndex; 
+            if (lastAction.btnId) {
+                let targetBtn = document.getElementById(lastAction.btnId);
+                if (targetBtn) {
+                    targetBtn.style.visibility = "visible";
+                    targetBtn.disabled = false;
+                }
+            }
+            updateSlots();
+        }
+    }
+    
+    function updateSlots() {
+        parsedSlots.forEach((slot, i) => {
+            let slotElement = document.getElementById(`fill-slot-${i}`);
+            if (slotElement) {
+                let mainChar = slot.isRevealed ? slot.baseChar : slot.userChar;
+                let htmlContent = "";
+
+                if (mainChar !== "") {
+                    htmlContent = `<div class="char-text">${mainChar}${slot.upperLower}</div><div class="underline-bar"></div>`;
+                } else {
+                    if (slot.upperLower !== "") {
+                        htmlContent = `<div class="char-text"><span class="hidden-base">ข</span><span class="visible-floating">${slot.upperLower}</span></div><div class="underline-bar"></div>`;
+                    } else {
+                        htmlContent = `<div class="char-text"></div><div class="underline-bar"></div>`;
+                    }
+                }
+                slotElement.innerHTML = htmlContent;
+            }
+        });
+    }
+
+    function useHint() {
+        if(hearts <= 0 || isHintUsedForCurrentQ || isSensorLocked) return;
+        let hintBtn = document.getElementById("hint-button");
+        hintBtn.classList.add("btn-pop-active");
+        setTimeout(() => hintBtn.classList.remove("btn-pop-active"), 400);
+
+        hearts--;
+        isHintUsedForCurrentQ = true;
+        
+        let heartStr = "";
+        for(let i=0; i<hearts; i++) heartStr += "💖 ";
+        document.getElementById("heart-display").innerText = heartStr || "💔 หมดแย้ว";
+        hintBtn.disabled = true;
+
+        let qData = questions[currentQ];
+        if(qData.type === "choice") {
+            let wrongIndices = [];
+            qData.choices.forEach((_, idx) => {
+                if (idx !== qData.ans) wrongIndices.push(idx);
+            });
+            wrongIndices.sort(() => Math.random() - 0.5);
+            let toCut = wrongIndices.slice(0, 2);
+            toCut.forEach(idx => {
+                let wrongBtn = document.getElementById(`choice-${idx}`);
+                if(wrongBtn) wrongBtn.disabled = true;
+            });
+            showGameAlert("🔮 ระบบช่วยตัดตัวเลือกที่ผิดออกให้ 2 ข้อแล้วครับ!", "info");
+        } else {
+            for(let i=0; i<parsedSlots.length; i++) {
+                if(!parsedSlots[i].isRevealed && parsedSlots[i].userChar === "") {
+                    pressLetter(parsedSlots[i].baseChar, null);
+                    break;
+                }
+            }
+            showGameAlert("🔮 ระบบช่วยเปิดอักษรเพิ่มให้อีก 1 ช่องแล้วจ้า!", "info");
         }
     }
 
@@ -712,165 +893,53 @@
         initGame();
     }
 
-    function deleteLastLetter() {
-        if (isSensorLocked || historyTracker.length === 0) return;
-        
-        let lastAction = historyTracker.pop();
-        
-        if (lastAction) {
-            currentInput[lastAction.slotIndex] = ""; 
-            currentSlotIndex = lastAction.slotIndex; 
-            
-            if (lastAction.btnId) {
-                let targetBtn = document.getElementById(lastAction.btnId);
-                if (targetBtn) {
-                    targetBtn.style.visibility = "visible";
-                    targetBtn.disabled = false;
-                }
-            }
-            updateSlots();
-        }
-    }
-
-    function isHintPosition(idx) {
-        let ansString = questions[currentQ].ans;
-        let positions = [0];
-        if (ansString === "ดินพอกหางหมู") positions = [0, 3, 6, 9];
-        else if (ansString === "หน้าเนื้อใจเสือ") positions = [0, 3, 6, 8];
-        else if (ansString === "ขมิ้นกับปูน") positions = [0, 4, 7];
-        else if (ansString === "ตะเกียบ") positions = [0, 2, 4];
-        return positions.includes(idx);
-    }
-    
-    function updateSlots() {
-        textSlotsStructure.forEach((item, i) => {
-            document.getElementById(`fill-base-${i}`).innerText = currentInput[i] ? currentInput[i] : "";
-        });
-    }
-
-    function applyFillHint() {
-        let ansString = questions[currentQ].ans;
-        historyTracker = [];
-        currentInput = new Array(textSlotsStructure.length).fill(""); 
-        
-        let hintPositions = [0]; 
-        if (ansString === "ดินพอกหางหมู") hintPositions = [0, 3, 6, 9]; 
-        else if (ansString === "หน้าเนื้อใจเสือ") hintPositions = [0, 3, 6, 8]; 
-        else if (ansString === "ขมิ้นกับปูน") hintPositions = [0, 4, 7]; 
-        else if (ansString === "ตะเกียบ") hintPositions = [0, 2, 4]; 
-        else if (ansString === "ดาว") hintPositions = [0]; 
-        else if (ansString === "เคียว") hintPositions = [0]; 
-
-        textSlotsStructure.forEach((item, idx) => {
-            if (hintPositions.includes(idx)) {
-                currentInput[idx] = item.base;
-                
-                let allGridButtons = document.querySelectorAll(".grid-item");
-                for (let btn of allGridButtons) {
-                    if (btn.dataset.letter === item.base && btn.style.visibility !== "hidden") {
-                        btn.style.visibility = "hidden";
-                        btn.disabled = true;
-                        break;
-                    }
-                }
-            }
-        });
-        
-        currentSlotIndex = 0;
-        moveToNextValidSlot(); 
-        updateSlots();
-    }
-
-    function useHint() {
-        if(hearts <= 0 || isHintUsedForCurrentQ || isSensorLocked) return;
-        
-        let hintBtn = document.getElementById("hint-button");
-        hintBtn.classList.add("btn-pop-active");
-        setTimeout(() => hintBtn.classList.remove("btn-pop-active"), 400);
-
-        hearts--;
-        isHintUsedForCurrentQ = true;
-        
-        let heartStr = "";
-        for(let i=0; i<hearts; i++) heartStr += "💖 ";
-        document.getElementById("heart-display").innerText = heartStr || "💔 หมดแย้ว";
-        hintBtn.disabled = true;
-
-        let qData = questions[currentQ];
-        
-        if(qData.type === "choice") {
-            let wrongIndices = [];
-            qData.choices.forEach((_, idx) => {
-                if (idx !== qData.ans) wrongIndices.push(idx);
-            });
-            wrongIndices.sort(() => Math.random() - 0.5);
-            let toCut = wrongIndices.slice(0, 2);
-            
-            toCut.forEach(idx => {
-                let wrongBtn = document.getElementById(`choice-${idx}`);
-                if(wrongBtn) wrongBtn.disabled = true;
-            });
-            showGameAlert("🔮 ระบบช่วยตัดตัวเลือกที่ผิดออกให้ 2 ข้อแล้วครับ!", "info");
-        } else {
-            applyFillHint();
-            showGameAlert("🔮 ระบบช่วยเปิดพยัญชนะต้นหลักครบทุกคำให้แล้วจ้า!", "info");
-        }
-    }
-
     function endGame() {
-        isGachaScreenActive = true; 
+        stopTimer();
+        isStatsScreenActive = true; 
         isSensorLocked = false; 
         document.getElementById("game-play").style.display = "none";
-        document.getElementById("gacha-screen").style.display = "block";
-        document.getElementById("final-score").innerText = score;
+        document.getElementById("stats-screen").style.display = "block";
+        document.getElementById("display-final-score").innerText = `${score} / 12`;
         
-        document.getElementById("gift-box").innerHTML = "🎁"; 
-        document.getElementById("gacha-result").innerText = "";
-        document.getElementById("gacha-btn").disabled = false;
+        let encouragementText = "";
+        if (score === 12) {
+            encouragementText = "🏆 <b>สุดยอดอัจฉริยะภาษาไทย!</b> คุณตอบถูกครบถ้วนทุกข้ออย่างสมบูรณ์แบบ มีความรอบรู้ลึกซึ้งทั้งวรรณคดีและสำนวนไทย ขอชื่นชมในความตั้งใจจริงครับ เก่งมากๆ เลิศที่สุด!";
+        } else if (score >= 9) {
+            encouragementText = "🎉 <b>ยอดเยี่ยมมากเลยครับ!</b> คุณทำคะแนนได้ในเกณฑ์ดีเยี่ยม แสดงว่ามีความเข้าใจในวิชาภาษาไทยเป็นอย่างดี ขอให้รักษามาตรฐานความเก่งนี้ไว้และพัฒนาต่อไปนะครับ!";
+        } else if (score >= 6) {
+            encouragementText = "👍 <b>ทำได้ดีทีเดียวครับ!</b> คุณผ่านเกณฑ์ครึ่งหนึ่งมาได้แบบสบายๆ ถือว่ามีพื้นฐานภาษาไทยที่ค่อนข้างใช้ได้ ลองฝึกฝนและหมั่นทบทวนเพิ่มอีกนิด รับรองว่าจะเก่งขึ้นแน่นอนครับ สู้ๆ!";
+        } else {
+            encouragementText = "💖 <b>เป็นกำลังใจให้นะครับ!</b> คะแนนในครั้งนี้อาจยังไม่เป็นไปตามเป้า แต่การเรียนรู้ไม่มีวันสิ้นสุดครับ เกมนี้ช่วยให้เราได้ฝึกทักษะและเห็นจุดที่เราต้องเติมเต็ม ลองกลับมาท้าทายใหม่อีกครั้งนะครับ!";
+        }
+        document.getElementById("feedback-encouragement").innerHTML = encouragementText;
 
-        let chance = score === 12 ? 100 : score >= 10 ? 80 : score >= 8 ? 50 : score >= 6 ? 20 : score >= 4 ? 10 : score >= 1 ? 5 : 0;
-        document.getElementById("chance-text").innerText = `โอกาสเปิดเจอกล่องรางวัลคือ: ${chance}%`;
-    }
-
-    function drawGacha() {
-        let gachaBtn = document.getElementById("gacha-btn");
-        if (gachaBtn.disabled) return;
-        
-        gachaBtn.classList.add("btn-pop-active");
-        
-        let giftBox = document.getElementById("gift-box");
-        let resText = document.getElementById("gacha-result");
-        
-        resText.innerHTML = "⏳ กำลังเขย่าลุ้นรับรางวัล ดุ๊กดิ๊กๆ...";
-        resText.style.color = "#ff9f43";
-
-        giftBox.className = "gift-box-container opening"; 
-
-        setTimeout(() => {
-            gachaBtn.disabled = true; 
-        }, 100);
-
-        setTimeout(() => {
-            giftBox.className = "gift-box-container"; 
-            gachaBtn.classList.remove("btn-pop-active");
-            
-            let chance = score === 12 ? 100 : score >= 10 ? 80 : score >= 8 ? 50 : score >= 6 ? 20 : score >= 4 ? 10 : score >= 1 ? 5 : 0;
-            let roll = Math.random() * 100;
-            
-            if(roll <= chance) { 
-                giftBox.innerHTML = "🎉✨💥✨🎉"; 
-                resText.style.color = "#2ecc71"; 
-                resText.innerHTML = "🎉 ยินดีด้วย! คุณได้รับรางวัลใหญ่"; 
-            } else { 
-                giftBox.innerHTML = "🥺💔"; 
-                resText.style.color = "#e74c3c"; 
-                resText.innerHTML = "เสียใจด้วยคุณยังไม่ได้รางวัล ไว้มาลองใหม่น้า"; 
+        let maxWrongCategory = "";
+        let maxWrongCount = 0;
+        for (let category in wrongAnswersStats) {
+            if (wrongAnswersStats[category] > maxWrongCount) {
+                maxWrongCount = wrongAnswersStats[category];
+                maxWrongCategory = category;
             }
-        }, 1500);
+        }
+
+        let analysisHTML = "";
+        if (maxWrongCount === 0) {
+            analysisHTML = "✨ <b>ไม่พบจุดอ่อนที่เด่นชัดเลยครับ!</b> คุณทำผลงานได้ยอดเยี่ยมในทุกหมวดหมู่ ทั้งความจำเนื้อเรื่องในวรรณคดี ไหวพริบสำนวน และปริศนาคำทาย สมบูรณ์แบบสุดๆ";
+        } else {
+            analysisHTML = `จากการวิเคราะห์ระบบบันทึก พบว่าคุณทำคะแนนพลาดในหมวด <b>"เรื่อง${maxWrongCategory}"</b> มากที่สุด (พลาดไป ${maxWrongCount} ข้อ)<br><br>`;
+            if (maxWrongCategory === "วรรณคดี") {
+                analysisHTML += "💡 <b>คำแนะนำเพิ่มเติม:</b> แนะนำให้ลองกลับไปทบทวนเกี่ยวกับตัวละครสำคัญ บทกลอนเด่นๆ และข้อคิดสอดแทรกในวรรณคดีเรื่อง นิราศภูเขาทอง, รามเกียรติ์ และลิลิตตะเลงพ่าย เพิ่มเติมดูนะครับ";
+            } else if (maxWrongCategory === "สำนวนไทย") {
+                analysisHTML += "💡 <b>คำแนะนำเพิ่มเติม:</b> แนะนำให้ลองศึกษาเรื่องคำพังเพยและที่มาของสำนวนไทยในชีวิตประจำวันเพิ่มเติม เพื่อให้จดจำพยัญชนะและบริบทความหมายของสำนวนได้แม่นยำขึ้นครับ";
+            } else if (maxWrongCategory === "ปริศนาคำทาย") {
+                analysisHTML += "💡 <b>คำแนะนำเพิ่มเติม:</b> แนะนำให้ฝึกฝนกระบวนการคิดวิเคราะห์ คำเปรียบเปรย หรือการเล่นคำขบขันแบบไทยๆ (อะไรเอ่ย) เพื่อช่วยพัฒนาไหวพริบการตีความคำคมคำทายให้ดียิ่งขึ้นครับ";
+            }
+        }
+        document.getElementById("weakness-analysis-text").innerHTML = analysisHTML;
     }
 
     // ==========================================
-    // 🎥 ระบบจับพิกัด และฟังก์ชันชาร์จหลอดสีชมพู
+    // 🎥 ระบบเซนเซอร์กล้องมือ AI
     // ==========================================
     const videoElement = document.getElementById('webcam-video');
     const canvasElement = document.getElementById('output-canvas');
@@ -887,7 +956,7 @@
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
             document.getElementById("webcam-status").style.display = "none";
             
-            if (isSensorLocked && !isGachaScreenActive && !isRulesActive && document.getElementById("next-action-container").style.display !== "block") {
+            if (isSensorLocked && !isStatsScreenActive && !isRulesActive && document.getElementById("next-action-container").style.display !== "block") {
                 cursorElement.style.display = "none";
                 resetSensorTracking();
                 canvasCtx.restore();
@@ -895,7 +964,6 @@
             }
 
             cursorElement.style.display = "block";
-            
             const hand = results.multiHandLandmarks[0];
             drawConnectors(canvasCtx, hand, HAND_CONNECTIONS, {color: '#ffb7b7', lineWidth: 4});
             drawLandmarks(canvasCtx, hand, {color: '#ffffff', lineWidth: 1, radius: 4});
@@ -927,19 +995,15 @@
                     lastHoveredElement = targetButton;
                     hoverStartTime = Date.now();
                     cursorElement.classList.add('hovering');
-                    
-                    if (targetButton.id === "gacha-btn" || targetButton.id === "start-game-btn" || targetButton.id === "next-q-btn" || targetButton.id === "clear-btn") {
+                    if (targetButton.id === "restart-btn" || targetButton.id === "start-game-btn" || targetButton.id === "next-q-btn" || targetButton.id === "clear-btn") {
                         targetButton.classList.add("pulse-shake");
                     }
                 }
 
                 const elapsed = Date.now() - hoverStartTime;
                 const progressPercent = Math.min((elapsed / 2000) * 100, 100);
-                
                 const progressBg = targetButton.querySelector('.btn-progress');
-                if (progressBg) {
-                    progressBg.style.width = progressPercent + '%'; 
-                }
+                if (progressBg) progressBg.style.width = progressPercent + '%'; 
 
                 if (elapsed >= 2000) {
                     targetButton.click();
@@ -959,7 +1023,6 @@
         if (lastHoveredElement) {
             const progressBg = lastHoveredElement.querySelector('.btn-progress');
             if (progressBg) progressBg.style.width = '0%';
-            
             lastHoveredElement.classList.remove("pulse-shake");
         }
         cursorElement.classList.remove('hovering');
@@ -975,14 +1038,9 @@
         onFrame: async () => { await hands.send({image: videoElement}); },
         width: 640, height: 480
     });
-    
     camera.start()
-        .then(() => { 
-            document.getElementById("webcam-status").innerText = "กล้องจับสัญญาณนิ้วมือพร้อมแล้ว! ชูนิ้วชี้เล็งค้างที่ปุ่มได้เลยน้า"; 
-        })
-        .catch(err => { 
-            document.getElementById("webcam-status").innerText = "❌ กล้องเปิดใช้งานไม่ได้จากระบบไฟล์เครื่องตรงๆ";
-        });
+        .then(() => { document.getElementById("webcam-status").innerText = "กล้องจับสัญญาณนิ้วมือพร้อมแล้ว! ชูนิ้วชี้เล็งค้างที่ปุ่มได้เลยน้า"; })
+        .catch(err => { document.getElementById("webcam-status").innerText = "❌ เกิดข้อผิดพลาดในการเชื่อมต่อกล้อง"; });
 </script>
 
 </body>
